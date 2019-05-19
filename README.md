@@ -13,7 +13,7 @@ What to write here... This is just a known snake game for everyone :)
 * Next then double-click on the JavaSnake.jar file or run the command using bash:
 
 ```bash
-java -jar JavaChess.jar
+java -jar JavaSnake.jar
 ```
 ## Author
 Dawid "Sloenthran" Nogacz
