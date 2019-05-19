@@ -23,7 +23,7 @@ public class Coordinates {
     }
 
     public boolean isValid() {
-        return x <= 39 && x >= 0 && y <= 21 && y >= 0;
+        return x <= 21 && x >= 0 && y <= 21 && y >= 0;
     }
 
     @Override

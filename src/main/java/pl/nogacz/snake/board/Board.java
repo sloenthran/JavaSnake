@@ -26,7 +26,7 @@ public class Board {
     private int direction = 1; // 1 - UP || 2 - BOTTOM || 3 - LEFT || 4 - RIGHT
     private int tailLength = 0;
 
-    private Coordinates snakeHeadCoordinates = new Coordinates(19, 10);
+    private Coordinates snakeHeadCoordinates = new Coordinates(10, 10);
 
     private PawnClass snakeHeadClass = new PawnClass(Pawn.SNAKE_HEAD);
     private PawnClass snakeBodyClass = new PawnClass(Pawn.SNAKE_BODY);
@@ -44,14 +44,9 @@ public class Board {
     private void addStartEntity() {
         board.put(snakeHeadCoordinates, snakeHeadClass);
 
-        int i = 0;
-
-        for(i = 0; i < 22; i++) {
+        for(int i = 0; i < 22; i++) {
             board.put(new Coordinates(0, i), new PawnClass(Pawn.BRICK));
-            board.put(new Coordinates(39, i), new PawnClass(Pawn.BRICK));
-        }
-
-        for(i = 1; i < 39; i++) {
+            board.put(new Coordinates(21, i), new PawnClass(Pawn.BRICK));
             board.put(new Coordinates(i, 0), new PawnClass(Pawn.BRICK));
             board.put(new Coordinates(i, 21), new PawnClass(Pawn.BRICK));
         }
@@ -138,7 +133,7 @@ public class Board {
         Coordinates foodCoordinates;
 
         do {
-            foodCoordinates = new Coordinates(random.nextInt(39), random.nextInt(21));
+            foodCoordinates = new Coordinates(random.nextInt(21), random.nextInt(21));
         } while(isFieldNotNull(foodCoordinates));
 
         board.put(foodCoordinates, foodClass);
@@ -149,7 +144,7 @@ public class Board {
             @Override
             protected Void call() throws Exception {
                 try {
-                    Thread.sleep(200);
+                    Thread.sleep(140);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }

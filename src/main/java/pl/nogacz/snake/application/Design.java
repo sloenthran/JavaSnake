@@ -23,32 +23,28 @@ public class Design {
 
     private void createBoardBackground() {
         Image background = new Image(Resources.getPath("background.jpg"));
-        BackgroundSize backgroundSize = new BackgroundSize(1280, 715, false, false, true, false);
+        BackgroundSize backgroundSize = new BackgroundSize(715, 715, false, false, true, false);
         BackgroundImage backgroundImage = new BackgroundImage(background, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, backgroundSize);
         gridPane.setBackground(new Background(backgroundImage));
     }
 
     private void generateEmptyBoard() {
-        gridPane.setMinSize(1280, 715);
-        gridPane.setMaxSize(1280, 715);
+        gridPane.setMinSize(715, 715);
+        gridPane.setMaxSize(715, 715);
 
-        int i = 0;
-
-        for(i = 0; i < 40; i++) {
+        for(int i = 0; i < 22; i++) {
             ColumnConstraints column = new ColumnConstraints(32);
             column.setHgrow(Priority.ALWAYS);
             column.setHalignment(HPos.CENTER);
             gridPane.getColumnConstraints().add(column);
-        }
 
-        for(i = 0; i < 22; i++) {
             RowConstraints row = new RowConstraints(32);
             row.setVgrow(Priority.ALWAYS);
             row.setValignment(VPos.CENTER);
             gridPane.getRowConstraints().add(row);
         }
 
-        gridPane.setPadding(new Insets(10, 0, 0, 5));
+        gridPane.setPadding(new Insets(10, 0, 0, 10));
     }
 
     public void addPawn(Coordinates coordinates, PawnClass pawn) {
