@@ -8,4 +8,16 @@ public enum Pawn {
     BRICK,
     SNAKE_HEAD,
     SNAKE_BODY;
+
+    public boolean isFood() {
+        return this == FOOD;
+    }
+
+    public boolean isBrick() {
+        return this == BRICK;
+    }
+
+    public boolean isBody() {
+        return this == SNAKE_BODY;
+    }
 }

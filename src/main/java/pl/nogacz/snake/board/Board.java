@@ -3,7 +3,6 @@ package pl.nogacz.snake.board;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import pl.nogacz.snake.application.Design;
 import pl.nogacz.snake.pawn.Pawn;
@@ -11,6 +10,7 @@ import pl.nogacz.snake.pawn.PawnClass;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * @author Dawid Nogacz on 19.05.2019
@@ -18,28 +18,31 @@ import java.util.Map;
 public class Board {
     private HashMap<Coordinates, PawnClass> board = new HashMap<>();
     private Design design;
+    private Random random = new Random();
+
     private boolean isEndGame = false;
 
     private int direction = 1; // 1 - UP || 2 - BOTTOM || 3 - LEFT || 4 - RIGHT
 
     private Coordinates snakeHeadCoordinates = new Coordinates(19, 10);
+
     private PawnClass snakeHeadClass = new PawnClass(Pawn.SNAKE_HEAD);
+    private PawnClass snakeBodyClass = new PawnClass(Pawn.SNAKE_BODY);
+    private PawnClass foodClass = new PawnClass(Pawn.FOOD);
 
     public Board(Design design) {
         this.design = design;
 
-        addStartSnake();
-        addBricks();
-        displayAllImage();
-
+        addStartEntity();
         mapTask();
     }
 
-    private void addStartSnake() {
+    private void addStartEntity() {
         board.put(snakeHeadCoordinates, snakeHeadClass);
-    }
+        board.put(new Coordinates(snakeHeadCoordinates.getX(), snakeHeadCoordinates.getY() + 1), snakeBodyClass);
+        board.put(new Coordinates(snakeHeadCoordinates.getX(), snakeHeadCoordinates.getY() + 2), snakeBodyClass);
+        board.put(new Coordinates(snakeHeadCoordinates.getX() , snakeHeadCoordinates.getY() + 3), snakeBodyClass);
 
-    private void addBricks() {
         int i = 0;
 
         for(i = 0; i < 22; i++) {
@@ -51,11 +54,14 @@ public class Board {
             board.put(new Coordinates(i, 0), new PawnClass(Pawn.BRICK));
             board.put(new Coordinates(i, 21), new PawnClass(Pawn.BRICK));
         }
+
+        addEat();
+        displayAllImage();
     }
 
     private void checkMap() {
         removeAllImage();
-        runSnake();
+        moveSnake();
         displayAllImage();
     }
 
@@ -71,19 +77,26 @@ public class Board {
         }
     }
 
-    private void runSnake() {
+    private void moveSnake() {
         switch(direction) {
-            case 1: moveSnake(new Coordinates(snakeHeadCoordinates.getX(), snakeHeadCoordinates.getY() - 1)); break;
-            case 2: moveSnake(new Coordinates(snakeHeadCoordinates.getX(), snakeHeadCoordinates.getY() + 1)); break;
-            case 3: moveSnake(new Coordinates(snakeHeadCoordinates.getX() - 1, snakeHeadCoordinates.getY())); break;
-            case 4: moveSnake(new Coordinates(snakeHeadCoordinates.getX() + 1, snakeHeadCoordinates.getY())); break;
+            case 1: moveSnakeHead(new Coordinates(snakeHeadCoordinates.getX(), snakeHeadCoordinates.getY() - 1)); break;
+            case 2: moveSnakeHead(new Coordinates(snakeHeadCoordinates.getX(), snakeHeadCoordinates.getY() + 1)); break;
+            case 3: moveSnakeHead(new Coordinates(snakeHeadCoordinates.getX() - 1, snakeHeadCoordinates.getY())); break;
+            case 4: moveSnakeHead(new Coordinates(snakeHeadCoordinates.getX() + 1, snakeHeadCoordinates.getY())); break;
         }
     }
 
-    private void moveSnake(Coordinates coordinates) {
+    private void moveSnakeHead(Coordinates coordinates) {
         if(coordinates.isValid()) {
             if(isFieldNotNull(coordinates)) {
+                if(getPawn(coordinates).getPawn().isFood()) {
+                    board.put(snakeHeadCoordinates, snakeBodyClass);
+                    board.put(coordinates, snakeHeadClass);
 
+                    snakeHeadCoordinates = coordinates;
+
+                    addEat();
+                }
             } else {
                 board.remove(snakeHeadCoordinates);
                 board.put(coordinates, snakeHeadClass);
@@ -93,12 +106,22 @@ public class Board {
         }
     }
 
+    private void addEat() {
+        Coordinates foodCoordinates;
+
+        do {
+            foodCoordinates = new Coordinates(random.nextInt(39), random.nextInt(21));
+        } while(isFieldNotNull(foodCoordinates));
+
+        board.put(foodCoordinates, foodClass);
+    }
+
     private void mapTask() {
         Task<Void> task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(200);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
@@ -120,17 +143,54 @@ public class Board {
         new Thread(task).start();
     }
 
+    private void bodyTask(Coordinates oldCoordinates, Coordinates newCoordinates) {
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                try {
+                    Thread.sleep(200);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+
+                return null;
+            }
+        };
+
+        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                board.remove(oldCoordinates);
+                board.put(newCoordinates, snakeBodyClass);
+            }
+        });
+
+        new Thread(task).start();
+    }
+
     public void readKeyboard(KeyEvent event) {
         switch(event.getCode()) {
-            case W: direction = 1; break;
-            case S: direction = 2; break;
-            case A: direction = 3; break;
-            case D: direction = 4; break;
+            case W: changeDirection(1); break;
+            case S: changeDirection(2); break;
+            case A: changeDirection(3); break;
+            case D: changeDirection(4); break;
 
-            case UP: direction = 1; break;
-            case DOWN: direction = 2; break;
-            case LEFT: direction = 3; break;
-            case RIGHT: direction = 4; break;
+            case UP: changeDirection(1); break;
+            case DOWN: changeDirection(2); break;
+            case LEFT: changeDirection(3); break;
+            case RIGHT: changeDirection(4); break;
+        }
+    }
+
+    private void changeDirection(int newDirection) {
+        if(newDirection == 1 && direction != 2) {
+            direction = 1;
+        } else if(newDirection == 2 && direction != 1) {
+            direction = 2;
+        } else if(newDirection == 3 && direction != 4) {
+            direction = 3;
+        } else if(newDirection == 4 && direction != 3) {
+            direction = 4;
         }
     }
 
