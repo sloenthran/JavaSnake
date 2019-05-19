@@ -5,6 +5,7 @@ import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 import pl.nogacz.snake.application.Design;
+import pl.nogacz.snake.application.EndGame;
 import pl.nogacz.snake.pawn.Pawn;
 import pl.nogacz.snake.pawn.PawnClass;
 
@@ -23,7 +24,7 @@ public class Board {
 
     private boolean isEndGame = false;
 
-    private int direction = 1; // 1 - UP || 2 - BOTTOM || 3 - LEFT || 4 - RIGHT
+    private static int direction = 1; // 1 - UP || 2 - BOTTOM || 3 - LEFT || 4 - RIGHT
     private int tailLength = 0;
 
     private Coordinates snakeHeadCoordinates = new Coordinates(10, 10);
@@ -95,6 +96,12 @@ public class Board {
                     snakeHeadCoordinates = coordinates;
 
                     addEat();
+                } else {
+                    isEndGame = true;
+
+                    new EndGame("End game...\n" +
+                            "You have " + tailLength + " points. \n" +
+                            "Maybe try again? :)");
                 }
             } else {
                 board.remove(snakeHeadCoordinates);
@@ -198,5 +205,9 @@ public class Board {
 
     private PawnClass getPawn(Coordinates coordinates) {
         return board.get(coordinates);
+    }
+
+    public static int getDirection() {
+        return direction;
     }
 }

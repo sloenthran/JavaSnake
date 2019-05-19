@@ -19,6 +19,20 @@ public class PawnClass {
         return new ImageView(image);
     }
 
+    public ImageView getImageDirection(int direction) {
+        String direct = "";
+
+        switch(direction) {
+            case 1: direct = "UP"; break;
+            case 2: direct = "BOTTOM"; break;
+            case 3: direct = "LEFT"; break;
+            case 4: direct = "RIGHT"; break;
+        }
+
+        Image image = new Image(Resources.getPath(pawn + "_" + direct + ".png"));
+        return new ImageView(image);
+    }
+
     public Pawn getPawn() {
         return pawn;
     }

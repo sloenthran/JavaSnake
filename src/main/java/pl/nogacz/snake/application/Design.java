@@ -6,6 +6,7 @@ import javafx.geometry.VPos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import pl.nogacz.snake.board.Board;
 import pl.nogacz.snake.board.Coordinates;
 import pl.nogacz.snake.pawn.PawnClass;
 
@@ -14,7 +15,6 @@ import pl.nogacz.snake.pawn.PawnClass;
  */
 public class Design {
     private GridPane gridPane = new GridPane();
-    private ImageView brick = new ImageView(new Image(Resources.getPath("brick.png")));
 
     public Design() {
         createBoardBackground();
@@ -48,11 +48,11 @@ public class Design {
     }
 
     public void addPawn(Coordinates coordinates, PawnClass pawn) {
-        gridPane.add(pawn.getImage(), coordinates.getX(), coordinates.getY());
-    }
-
-    public void addBrick(Coordinates coordinates) {
-        gridPane.add(brick, coordinates.getX(), coordinates.getY());
+        if(pawn.getPawn().isHead()) {
+            gridPane.add(pawn.getImageDirection(Board.getDirection()), coordinates.getX(), coordinates.getY());
+        } else {
+            gridPane.add(pawn.getImage(), coordinates.getX(), coordinates.getY());
+        }
     }
 
     public void removePawn(Coordinates coordinates) {

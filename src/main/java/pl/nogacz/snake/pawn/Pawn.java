@@ -13,11 +13,7 @@ public enum Pawn {
         return this == FOOD;
     }
 
-    public boolean isBrick() {
-        return this == BRICK;
-    }
-
-    public boolean isBody() {
-        return this == SNAKE_BODY;
+    public boolean isHead() {
+        return this == SNAKE_HEAD;
     }
 }
