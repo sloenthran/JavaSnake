@@ -10,7 +10,7 @@ What to write here... This is just a known snake game for everyone :)
 
 * Download latest zip archive -> https://github.com/sloenthran/JavaSnake/releases/latest
 * Unpack archive
-* Next then double-click on the JavaChess.jar file or run the command using bash:
+* Next then double-click on the JavaSnake.jar file or run the command using bash:
 
 ```bash
 java -jar JavaChess.jar
