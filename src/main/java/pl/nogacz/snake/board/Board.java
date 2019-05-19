@@ -8,6 +8,7 @@ import pl.nogacz.snake.application.Design;
 import pl.nogacz.snake.pawn.Pawn;
 import pl.nogacz.snake.pawn.PawnClass;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -23,12 +24,15 @@ public class Board {
     private boolean isEndGame = false;
 
     private int direction = 1; // 1 - UP || 2 - BOTTOM || 3 - LEFT || 4 - RIGHT
+    private int tailLength = 0;
 
     private Coordinates snakeHeadCoordinates = new Coordinates(19, 10);
 
     private PawnClass snakeHeadClass = new PawnClass(Pawn.SNAKE_HEAD);
     private PawnClass snakeBodyClass = new PawnClass(Pawn.SNAKE_BODY);
     private PawnClass foodClass = new PawnClass(Pawn.FOOD);
+
+    private ArrayList<Coordinates> snakeTail = new ArrayList<>();
 
     public Board(Design design) {
         this.design = design;
@@ -39,9 +43,6 @@ public class Board {
 
     private void addStartEntity() {
         board.put(snakeHeadCoordinates, snakeHeadClass);
-        board.put(new Coordinates(snakeHeadCoordinates.getX(), snakeHeadCoordinates.getY() + 1), snakeBodyClass);
-        board.put(new Coordinates(snakeHeadCoordinates.getX(), snakeHeadCoordinates.getY() + 2), snakeBodyClass);
-        board.put(new Coordinates(snakeHeadCoordinates.getX() , snakeHeadCoordinates.getY() + 3), snakeBodyClass);
 
         int i = 0;
 
@@ -90,8 +91,11 @@ public class Board {
         if(coordinates.isValid()) {
             if(isFieldNotNull(coordinates)) {
                 if(getPawn(coordinates).getPawn().isFood()) {
+                    board.remove(snakeHeadCoordinates);
                     board.put(snakeHeadCoordinates, snakeBodyClass);
                     board.put(coordinates, snakeHeadClass);
+                    snakeTail.add(snakeHeadCoordinates);
+                    tailLength++;
 
                     snakeHeadCoordinates = coordinates;
 
@@ -102,8 +106,32 @@ public class Board {
                 board.put(coordinates, snakeHeadClass);
 
                 snakeHeadCoordinates = coordinates;
+
+                if(tailLength > 0) {
+                    moveSnakeBody();
+                }
             }
         }
+    }
+
+    private void moveSnakeBody() {
+        switch(direction) {
+            case 1: moveSnakeBodyHandler(new Coordinates(snakeHeadCoordinates.getX(), snakeHeadCoordinates.getY() + 1)); break;
+            case 2: moveSnakeBodyHandler(new Coordinates(snakeHeadCoordinates.getX(), snakeHeadCoordinates.getY() - 1)); break;
+            case 3: moveSnakeBodyHandler(new Coordinates(snakeHeadCoordinates.getX() + 1, snakeHeadCoordinates.getY())); break;
+            case 4: moveSnakeBodyHandler(new Coordinates(snakeHeadCoordinates.getX() - 1, snakeHeadCoordinates.getY())); break;
+        }
+    }
+
+    private void moveSnakeBodyHandler(Coordinates coordinates) {
+        if(tailLength == snakeTail.size()) {
+            Coordinates endTail = snakeTail.get(0);
+            board.remove(endTail);
+            snakeTail.remove(endTail);
+        }
+
+        board.put(coordinates, snakeBodyClass);
+        snakeTail.add(coordinates);
     }
 
     private void addEat() {
@@ -137,31 +165,6 @@ public class Board {
                     checkMap();
                     mapTask();
                 }
-            }
-        });
-
-        new Thread(task).start();
-    }
-
-    private void bodyTask(Coordinates oldCoordinates, Coordinates newCoordinates) {
-        Task<Void> task = new Task<Void>() {
-            @Override
-            protected Void call() throws Exception {
-                try {
-                    Thread.sleep(200);
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
-
-                return null;
-            }
-        };
-
-        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-            @Override
-            public void handle(WorkerStateEvent event) {
-                board.remove(oldCoordinates);
-                board.put(newCoordinates, snakeBodyClass);
             }
         });
 
