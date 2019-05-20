@@ -4,7 +4,7 @@ Snake game written in Java language.
 
 What to write here... This is just a known snake game for everyone :)
 
-![JavaChess](https://raw.githubusercontent.com/sloenthran/JavaSnake/master/src/main/resources/screen.png)
+[![JavaChess](https://raw.githubusercontent.com/sloenthran/JavaSnake/master/src/main/resources/screen.png)](https://youtu.be/7YzgBNdIDWg)
 
 ## Usage
 
