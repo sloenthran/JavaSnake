@@ -15,5 +15,8 @@ What to write here... This is just a known snake game for everyone :)
 ```bash
 java -jar JavaSnake.jar
 ```
+## Control
+WASD or arrows
+
 ## Author
 Dawid "Sloenthran" Nogacz
