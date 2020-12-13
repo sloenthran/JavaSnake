@@ -11,7 +11,7 @@ public class Achievements {
    private double[] progress;
     Design design;
 
-    public Achievements(Design design){
+    public Achievements(Design design){         // Constructor loads achievement status from src/main/AchievementData folder
         this.design=design;
         achieved=new int[4];
         progress=new double[4];
@@ -41,7 +41,7 @@ public class Achievements {
 
 
     }
-    public void AchievementCheck(){
+    public void AchievementCheck(){                         // Checks for new achievement unlocks. 
         boolean Change=false;
         
         if(progress[0]==(achieved[0]+1)*50){
@@ -74,7 +74,7 @@ public class Achievements {
 
     }
 
-    public void updateAchievements(){
+    public void updateAchievements(){                                           // Writes achievement status to Achievements.txt
         String achievements=achieved[0]+"\n"+achieved[1]+"\n"+achieved[2]+"\n"+achieved[3]+"\n";
         System.out.println(achievements);
         try{
@@ -85,7 +85,7 @@ public class Achievements {
         }catch(Exception e){e.printStackTrace();}
 
     }
-    public void updateProgress(){
+    public void updateProgress(){                                               // Writes progress status to Counter.txt
         String progs=progress[0]+"\n"+progress[1]+"\n"+progress[2]+"\n"+0+"\n";
         System.out.println(progs);
         try{
@@ -97,7 +97,7 @@ public class Achievements {
     }
 
 
-    public void printDialog(int Select) {
+    public void printDialog(int Select) {                           //Creates a tray notification while in game for newly unlocked achievements.
 
         String message="";
         switch(Select) {
@@ -141,7 +141,7 @@ public class Achievements {
         
     }
 
-    public String toString(){
+    public String toString(){                                   
         String toStr="";
         
             for(int count=0;count<4;count++){

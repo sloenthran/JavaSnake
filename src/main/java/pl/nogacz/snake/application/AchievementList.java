@@ -7,10 +7,10 @@ import java.util.Optional;
 /**
  * @author Dawid Nogacz on 19.05.2019
  */
-public class AchievementList {
+public class AchievementList {                  // A class to open Achievements
     private Achievements trophy;
 
-    public AchievementList(Achievements trophy) {
+    public AchievementList(Achievements trophy) {              
         this.trophy = trophy;
 
         printDialog();
