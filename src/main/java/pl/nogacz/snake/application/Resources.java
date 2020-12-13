@@ -13,4 +13,18 @@ public class Resources {
 
         return resource.getProtocol() + ":" + resource.getPath();
     }
+
+    public static String getPathTxt(String fileName) {
+        ClassLoader classLoader = Resources.class.getClassLoader();
+
+        URL resource = classLoader.getResource(fileName);
+
+        return resource.getPath();
+    }
+
+
+
+
+
+
 }

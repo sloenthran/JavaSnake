@@ -20,5 +20,7 @@ gradle run
 ## Control
 WASD or arrows
 
+O for achievement window
+
 ## Author
 Dawid "Sloenthran" Nogacz
