@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.apache.log4j.*;
 import pl.nogacz.snake.application.Design;
 import pl.nogacz.snake.board.Board;
 
@@ -15,6 +16,10 @@ public class Snake extends Application {
     Board board = new Board(design);
 
     public static void main(String[] args) {
+        Logger logger = Logger.getLogger(Snake.class);
+        BasicConfigurator.configure();
+        logger.info("This is my first log4j's statement");
+
         launch(args);
     }
 

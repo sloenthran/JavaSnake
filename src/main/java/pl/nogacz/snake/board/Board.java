@@ -17,6 +17,7 @@ import java.util.Random;
 /**
  * @author Dawid Nogacz on 19.05.2019
  */
+//board olusturma bu classda
 public class Board {
     private HashMap<Coordinates, PawnClass> board = new HashMap<>();
     private Design design;
