@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 import pl.nogacz.snake.application.Design;
 import pl.nogacz.snake.application.EndGame;
+import pl.nogacz.snake.application.PauseGame;
 import pl.nogacz.snake.pawn.Pawn;
 import pl.nogacz.snake.pawn.PawnClass;
 
@@ -24,7 +25,7 @@ public class Board {
     private Random random = new Random();
 
     private boolean isEndGame = false;
-    private boolean isPressedP= false;
+    public static boolean isPressedP= false;
 
     private static int direction = 1; // 1 - UP || 2 - BOTTOM || 3 - LEFT || 4 - RIGHT
     private int tailLength = 0;
@@ -169,10 +170,13 @@ public class Board {
                     if(!isPressedP) {
                         checkMap();
                         mapTask();
-
                     }
                     else{
-
+                        new PauseGame();
+                        if(!isPressedP){
+                            checkMap();
+                            mapTask();
+                        }
                     }
                 }
             }
