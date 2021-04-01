@@ -52,6 +52,7 @@ public class PauseGame {
                 //Data starts
               //  Design design= board.getDesign();
                 int direction = 1;Board.getDirection();
+                Coordinates foodCoordinates= board.getFoodCoordinates();
                 int tailLength = board.getTailLength();
             //add this while loading    HashMap<Coordinates, PawnClass> map= board.getMap();
                 /*PawnClass snakeHeadClass = board.getSnakeHeadClass();
@@ -61,11 +62,18 @@ public class PauseGame {
                  */
                 ArrayList<Coordinates> snakeTail = board.getSnakeTail();
                 Coordinates snakeHeadCoordinates = board.getSnakeHeadCoordinates();
+
                 //Data ends
                 CRC32 crc= new CRC32();
 
                 crc.update(direction);
                 String data=direction+"_"+crc.getValue()+"_";
+
+                crc.update(foodCoordinates.getX());
+                data+=foodCoordinates.getX()+"_"+crc.getValue()+"_";
+
+                crc.update(foodCoordinates.getY());
+                data+=foodCoordinates.getY()+"_"+crc.getValue()+"_";
 
                 crc.update(tailLength);
                 data+=tailLength+"_"+crc.getValue()+"_";

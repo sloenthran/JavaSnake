@@ -23,7 +23,7 @@ public class Board {
     private HashMap<Coordinates, PawnClass> board = new HashMap<>();
     private Design design;
     private Random random = new Random();
-
+    private Coordinates foodCoordinates;
     private boolean isEndGame = false;
     public static boolean isPressedP= false;
 
@@ -140,7 +140,6 @@ public class Board {
     }
 
     private void addEat() {
-        Coordinates foodCoordinates;
 
         do {
             foodCoordinates = new Coordinates(random.nextInt(21), random.nextInt(21));
@@ -233,4 +232,5 @@ public class Board {
     public PawnClass getSnakeBodyClass(){return this.snakeBodyClass;}
     public Coordinates getSnakeHeadCoordinates(){return this.snakeHeadCoordinates;}
     public ArrayList<Coordinates> getSnakeTail(){return this.snakeTail;}
+    public Coordinates getFoodCoordinates(){return this.foodCoordinates;};
 }
