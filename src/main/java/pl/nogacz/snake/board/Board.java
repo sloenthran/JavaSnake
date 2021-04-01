@@ -24,6 +24,7 @@ public class Board {
     private Random random = new Random();
 
     private boolean isEndGame = false;
+    private boolean isPressedP= false;
 
     private static int direction = 1; // 1 - UP || 2 - BOTTOM || 3 - LEFT || 4 - RIGHT
     private int tailLength = 0;
@@ -165,8 +166,14 @@ public class Board {
             @Override
             public void handle(WorkerStateEvent event) {
                 if(!isEndGame) {
-                    checkMap();
-                    mapTask();
+                    if(!isPressedP) {
+                        checkMap();
+                        mapTask();
+
+                    }
+                    else{
+
+                    }
                 }
             }
         });
@@ -185,6 +192,7 @@ public class Board {
             case DOWN: changeDirection(2); break;
             case LEFT: changeDirection(3); break;
             case RIGHT: changeDirection(4); break;
+            case P: isPressedP=true; break;
         }
     }
 
