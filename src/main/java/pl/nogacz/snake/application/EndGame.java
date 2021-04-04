@@ -25,7 +25,7 @@ public class EndGame {
     private String message;
     public EndGame(String message) {
         this.message = message;
-        playEndGameMusic("/Users/erkamakcinar/Desktop/music/endMusic.wav");
+        playBeginAndEndGameMusic(Resources.getPath("endMusic.wav"));
 
         printDialog();
     }
@@ -50,9 +50,10 @@ public class EndGame {
     }
 
     public void newGame() {
+        playBeginAndEndGameMusic(Resources.getPath("startMusic.wav"));
         restartApplication();
     }
-    private void playEndGameMusic(String audioFilePath) {
+    private void playBeginAndEndGameMusic(String audioFilePath) {
         File audioFile = new File(audioFilePath);
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
@@ -62,9 +63,6 @@ public class EndGame {
             DataLine.Info info = new DataLine.Info(Clip.class, format);
  
             Clip audioClip = (Clip) AudioSystem.getLine(info);
- 
-            //audioClip.addLineListener(this);
- 
             audioClip.open(audioStream);
             audioClip.start();
 
