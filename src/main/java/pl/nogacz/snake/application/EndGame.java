@@ -25,7 +25,7 @@ public class EndGame {
     private String message;
     public EndGame(String message) {
         this.message = message;
-        playBeginAndEndGameMusic(Resources.getPath("endMusic.wav"));
+        playBeginAndEndGameMusic("/Users/erkamakcinar/Desktop/music/endMusic.wav");
 
         printDialog();
     }
@@ -50,7 +50,7 @@ public class EndGame {
     }
 
     public void newGame() {
-        playBeginAndEndGameMusic(Resources.getPath("startMusic.wav"));
+        playBeginAndEndGameMusic("/Users/erkamakcinar/Desktop/music/startMusic.wav");
         restartApplication();
     }
     private void playBeginAndEndGameMusic(String audioFilePath) {
