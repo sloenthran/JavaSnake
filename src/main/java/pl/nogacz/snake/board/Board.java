@@ -44,7 +44,6 @@ public class Board {
 
     private void addStartEntity() {
         board.put(snakeHeadCoordinates, snakeHeadClass);
-
         for(int i = 0; i < 22; i++) {
             board.put(new Coordinates(0, i), new PawnClass(Pawn.BRICK));
             board.put(new Coordinates(21, i), new PawnClass(Pawn.BRICK));
