@@ -4,16 +4,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import pl.nogacz.snake.Snake;
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-
-import java.io.IOException;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -25,7 +15,8 @@ public class EndGame {
     private String message;
     public EndGame(String message) {
         this.message = message;
-        playBeginAndEndGameMusic("src/main/resources/endMusic.wav");
+        Music.stopLoopedMusic();
+        Music.play_Start_End_Eat_GameMusic(Music.END_MUSIC_PATH);
 
         printDialog();
     }
@@ -50,33 +41,10 @@ public class EndGame {
     }
 
     public void newGame() {
-        playBeginAndEndGameMusic("src/main/resources/startMusic.wav");
+        Music.play_Start_End_Eat_GameMusic(Music.START_MUSIC_PATH);
         restartApplication();
     }
-    private void playBeginAndEndGameMusic(String audioFilePath) {
-        File audioFile = new File(audioFilePath);
-        try {
-            AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
- 
-            AudioFormat format = audioStream.getFormat();
- 
-            DataLine.Info info = new DataLine.Info(Clip.class, format);
- 
-            Clip audioClip = (Clip) AudioSystem.getLine(info);
-            audioClip.open(audioStream);
-            audioClip.start();
-
-        } catch (UnsupportedAudioFileException ex) {
-            System.out.println("The specified audio file is not supported.");
-            ex.printStackTrace();
-        } catch (LineUnavailableException ex) {
-            System.out.println("Audio line for playing back is unavailable.");
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            System.out.println("Error playing the audio file.");
-            ex.printStackTrace();
-        }    
-    }
+    
 
     private void restartApplication()
     {
