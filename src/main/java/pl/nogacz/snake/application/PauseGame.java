@@ -51,17 +51,19 @@ public class PauseGame {
                 FileWriter writer=new FileWriter(path+"/save.txt");
                 //Data starts
               //  Design design= board.getDesign();
-                int direction = 1;Board.getDirection();
+                int direction =Board.getDirection();
                 Coordinates foodCoordinates= board.getFoodCoordinates();
                 int tailLength = board.getTailLength();
+                Coordinates snakeHeadCoordinates = board.getSnakeHeadCoordinates();
+                ArrayList<Coordinates> snakeTail = board.getSnakeTail();
+
             //add this while loading    HashMap<Coordinates, PawnClass> map= board.getMap();
                 /*PawnClass snakeHeadClass = board.getSnakeHeadClass();
                 PawnClass snakeBodyClass = board.getSnakeBodyClass();
                 PawnClass foodClass = board.getFoodClass();
 
                  */
-                ArrayList<Coordinates> snakeTail = board.getSnakeTail();
-                Coordinates snakeHeadCoordinates = board.getSnakeHeadCoordinates();
+
 
                 //Data ends
                 CRC32 crc= new CRC32();
@@ -78,17 +80,20 @@ public class PauseGame {
                 crc.update(tailLength);
                 data+=tailLength+"_"+crc.getValue()+"_";
 
+
+                crc.update(snakeHeadCoordinates.getX());
+                data+=snakeHeadCoordinates.getX()+"_"+crc.getValue()+"_";
+
+                crc.update(snakeHeadCoordinates.getY());
+                data+=snakeHeadCoordinates.getY()+"_"+crc.getValue()+"_";
+
                 for(Coordinates c: snakeTail){
                     crc.update(c.getX());
                     data+=c.getX()+"_"+crc.getValue()+"_";
                     crc.update(c.getY());
                     data+=c.getY()+"_"+crc.getValue()+"_";
                 }
-                crc.update(snakeHeadCoordinates.getX());
-                data+=snakeHeadCoordinates.getX()+"_"+crc.getValue()+"_";
-
-                crc.update(snakeHeadCoordinates.getY());
-                data+=snakeHeadCoordinates.getY()+"_"+crc.getValue();
+                data=data.substring(0,data.length()-1);
                 writer.write(data);
                 writer.close();
                 System.exit(0);

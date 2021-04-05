@@ -8,12 +8,19 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import pl.nogacz.snake.board.Board;
 import pl.nogacz.snake.board.Coordinates;
 import pl.nogacz.snake.pawn.Pawn;
 import pl.nogacz.snake.pawn.PawnClass;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.zip.CRC32;
 
 
 public class Starting {
@@ -58,8 +65,54 @@ public class Starting {
 
         b1.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                System.out.println("save");
-                System.exit(0);
+                final FileChooser fs=new FileChooser();
+                fs.setTitle("Choose save file (save.txt).");
+                final File selectedFile = fs.showOpenDialog(new Stage());
+                String path="";
+                if (selectedFile != null) {
+                    path=selectedFile.getAbsolutePath();
+                }
+                Scanner scan;
+                try {
+                    scan=new Scanner(new FileInputStream(path));
+                    String [] array=scan.nextLine().split("_");
+                    long [] arr=new long[array.length];
+                    for(int i=0;i< array.length;i++){
+                        arr[i]=Long.parseLong(array[i]);
+                    }
+                    if(arr.length<11) {
+                        System.out.println("cik2");
+                        System.exit(0);
+
+                    }
+                    CRC32 crc= new CRC32();
+                    for(int i=0;i<arr.length;i+=2) {//checking crc32
+                        crc.update((int)arr[i]);
+                        System.out.println(arr[i]);
+                        if (arr[i + 1] != crc.getValue()) {
+                            System.out.println("cikis1");
+                            System.exit(0);
+                        }
+                    }
+                    int direction =(int)arr[0];
+                    Coordinates foodCoordinates= new Coordinates((int)arr[2],(int)arr[4]);
+                    int tailLength = (int)arr[6];
+                    Coordinates snakeHeadCoordinates=new Coordinates((int)arr[8],(int)arr[10]);
+                    int temp=arr.length-12;
+                    ArrayList<Coordinates> snakeTail = new ArrayList<>();
+                    for(int i=0;i<temp;i+=4){
+                        snakeTail.add(new Coordinates((int)arr[13+i],(int)arr[15+i]));
+                    }
+                    Design design=new Design();
+                    Board board=new Board(direction,foodCoordinates,tailLength,snakeHeadCoordinates,
+                            snakeTail,design);
+                    Scene scene = new Scene(design.getGridPane(), 715, 715, Color.BLACK);
+                    scene.setOnKeyReleased(event -> board.readKeyboard(event));
+                    s.setTitle("JavaSnake");
+                    s.setScene(scene);
+                } catch (FileNotFoundException fileNotFoundException) {
+                    fileNotFoundException.printStackTrace();
+                }
             }
         });
         b2.setOnAction(new EventHandler<ActionEvent>() {

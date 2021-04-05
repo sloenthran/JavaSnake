@@ -44,6 +44,29 @@ public class Board {
         addStartEntity();
         mapTask();
     }
+    public Board(int dir,Coordinates foodCoordinates,int tailLength,
+                 Coordinates snakeHeadCoordinates, ArrayList<Coordinates> snakeTail,
+                 Design design){
+        this.design=design;
+        direction=dir;
+        this.foodCoordinates=foodCoordinates;
+        this.tailLength=tailLength;
+        this.snakeHeadCoordinates=snakeHeadCoordinates;
+        this.snakeTail=snakeTail;
+        addLoadEntity();
+        mapTask();
+    }
+    private void addLoadEntity(){
+        board.put(snakeHeadCoordinates, snakeHeadClass);
+        for(int i = 0; i < 22; i++) {
+            board.put(new Coordinates(0, i), new PawnClass(Pawn.BRICK));
+            board.put(new Coordinates(21, i), new PawnClass(Pawn.BRICK));
+            board.put(new Coordinates(i, 0), new PawnClass(Pawn.BRICK));
+            board.put(new Coordinates(i, 21), new PawnClass(Pawn.BRICK));
+        }
+        board.put(foodCoordinates, foodClass);
+        displayAllImage();
+    }
 
     private void addStartEntity() {
         board.put(snakeHeadCoordinates, snakeHeadClass);
