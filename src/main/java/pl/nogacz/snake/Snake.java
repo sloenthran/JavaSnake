@@ -26,14 +26,6 @@ public class Snake extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-       /* Scene scene = new Scene(design.getGridPane(), 715, 715, Color.BLACK);
-        scene.setOnKeyReleased(event -> board.readKeyboard(event));
-
-        primaryStage.setTitle("JavaSnake");
-        primaryStage.setScene(scene);
-        primaryStage.setResizable(false);
-        primaryStage.show();
-*/
         Starting start=new Starting(primaryStage);
         primaryStage.setScene(new Scene(start.gridPane,715,715,Color.BLACK));
         primaryStage.setResizable(false);

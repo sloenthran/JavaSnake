@@ -9,7 +9,6 @@ import pl.nogacz.snake.application.EndGame;
 import pl.nogacz.snake.application.PauseGame;
 import pl.nogacz.snake.pawn.Pawn;
 import pl.nogacz.snake.pawn.PawnClass;
-import sun.security.krb5.internal.crypto.Des;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -247,13 +246,8 @@ public class Board {
     }
 
     public Board getBoard(){return this;}
-    public HashMap<Coordinates, PawnClass> getMap(){return this.board;}
-    public Design getDesign(){return this.design;}
     public int getTailLength(){return this.tailLength;}
-    public PawnClass getSnakeHeadClass(){ return this.snakeHeadClass;}
-    public PawnClass getFoodClass(){ return this.snakeHeadClass;}
-    public PawnClass getSnakeBodyClass(){return this.snakeBodyClass;}
     public Coordinates getSnakeHeadCoordinates(){return this.snakeHeadCoordinates;}
     public ArrayList<Coordinates> getSnakeTail(){return this.snakeTail;}
-    public Coordinates getFoodCoordinates(){return this.foodCoordinates;};
+    public Coordinates getFoodCoordinates(){return this.foodCoordinates;}
 }

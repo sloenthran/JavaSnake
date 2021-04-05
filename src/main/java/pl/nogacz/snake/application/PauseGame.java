@@ -1,23 +1,17 @@
 package pl.nogacz.snake.application;
 
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import pl.nogacz.snake.board.Board;
 import pl.nogacz.snake.board.Coordinates;
-import pl.nogacz.snake.pawn.Pawn;
-import pl.nogacz.snake.pawn.PawnClass;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Optional;
-import java.util.Random;
 import java.util.zip.CRC32;
 
 import static pl.nogacz.snake.board.Board.isPressedP;
@@ -50,22 +44,13 @@ public class PauseGame {
             try {
                 FileWriter writer=new FileWriter(path+"/save.txt");
                 //Data starts
-              //  Design design= board.getDesign();
                 int direction =Board.getDirection();
                 Coordinates foodCoordinates= board.getFoodCoordinates();
                 int tailLength = board.getTailLength();
                 Coordinates snakeHeadCoordinates = board.getSnakeHeadCoordinates();
                 ArrayList<Coordinates> snakeTail = board.getSnakeTail();
-
-            //add this while loading    HashMap<Coordinates, PawnClass> map= board.getMap();
-                /*PawnClass snakeHeadClass = board.getSnakeHeadClass();
-                PawnClass snakeBodyClass = board.getSnakeBodyClass();
-                PawnClass foodClass = board.getFoodClass();
-
-                 */
-
-
                 //Data ends
+
                 CRC32 crc= new CRC32();
 
                 crc.update(direction);
