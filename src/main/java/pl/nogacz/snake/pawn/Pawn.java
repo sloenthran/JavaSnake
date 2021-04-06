@@ -7,10 +7,15 @@ public enum Pawn {
     FOOD,
     BRICK,
     SNAKE_HEAD,
-    SNAKE_BODY;
+    SNAKE_BODY,
+    Kare;
 
     public boolean isFood() {
         return this == FOOD;
+    }
+    
+    public boolean isKare() {
+        return this == Kare;
     }
 
     public boolean isHead() {

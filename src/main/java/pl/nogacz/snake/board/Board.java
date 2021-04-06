@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 import pl.nogacz.snake.application.Design;
 import pl.nogacz.snake.application.EndGame;
+import pl.nogacz.snake.pawn.Kare;
 import pl.nogacz.snake.pawn.Pawn;
 import pl.nogacz.snake.pawn.PawnClass;
 
@@ -23,7 +24,7 @@ public class Board {
     private Random random = new Random();
 
     private boolean isEndGame = false;
-
+    private boolean canDie=true;
     private static int direction = 1; // 1 - UP || 2 - BOTTOM || 3 - LEFT || 4 - RIGHT
     private int tailLength = 0;
 
@@ -32,6 +33,8 @@ public class Board {
     private PawnClass snakeHeadClass = new PawnClass(Pawn.SNAKE_HEAD);
     private PawnClass snakeBodyClass = new PawnClass(Pawn.SNAKE_BODY);
     private PawnClass foodClass = new PawnClass(Pawn.FOOD);
+    private PawnClass kareClass=new PawnClass(Pawn.Kare);
+    private Kare kare=new Kare();
 
     private ArrayList<Coordinates> snakeTail = new ArrayList<>();
 
@@ -53,6 +56,10 @@ public class Board {
         }
 
         addEat();
+        int x=random.nextInt(10000);
+        if(x==2){
+            addKare();
+        }
         displayAllImage();
     }
 
@@ -84,6 +91,19 @@ public class Board {
     }
 
     private void moveSnakeHead(Coordinates coordinates) {
+
+
+       /* if(kare.tur==kare.turSayisi){
+            canDie=true;
+
+        }*/
+        if(!kare.kareVarMi()){
+            int x=random.nextInt(100);
+            if(x==2){
+                addKare();
+            }
+
+        }
         if(coordinates.isValid()) {
             if(isFieldNotNull(coordinates)) {
                 if(getPawn(coordinates).getPawn().isFood()) {
@@ -96,12 +116,30 @@ public class Board {
                     snakeHeadCoordinates = coordinates;
 
                     addEat();
-                } else {
-                    isEndGame = true;
+                } 
+                else if(getPawn(coordinates).getPawn().isKare()){
+                    board.remove(snakeHeadCoordinates);
+                    board.put(snakeHeadCoordinates, snakeBodyClass);
+                    board.put(coordinates, snakeHeadClass);
+                    snakeTail.add(snakeHeadCoordinates);
+                    tailLength++;
 
-                    new EndGame("End game...\n" +
-                            "You have " + tailLength + " points. \n" +
-                            "Maybe try again? :)");
+                    snakeHeadCoordinates = coordinates;
+                    canDie=false;
+                    System.out.println("yedi " + canDie);
+                }
+                else {
+                    System.out.println("cd " + canDie);
+                    if(canDie){
+                        isEndGame = true;
+
+                        new EndGame("End game...\n" +
+                                "You have " + tailLength + " points. \n" +
+                                "Maybe try again? :)");
+                    }
+                    else{
+                        System.out.println("cant die");
+                    }
                 }
             } else {
                 board.remove(snakeHeadCoordinates);
@@ -145,6 +183,17 @@ public class Board {
 
         board.put(foodCoordinates, foodClass);
     }
+
+    private void addKare() {
+        Coordinates kareCoordinates;
+
+        do {
+            kareCoordinates = new Coordinates(random.nextInt(21), random.nextInt(21));
+        } while(isFieldNotNull(kareCoordinates));
+
+        board.put(kareCoordinates, kareClass);
+    }
+
 
     private void mapTask() {
         Task<Void> task = new Task<Void>() {
