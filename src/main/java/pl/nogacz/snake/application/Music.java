@@ -12,6 +12,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Music {
+    //Musics are taken from "https://mixkit.co"
     static final String START_MUSIC_PATH = "src/main/resources/startMusic.wav";
     static final String END_MUSIC_PATH = "src/main/resources/endMusic.wav";
     public static final String EAT_MUSIC_PATH = "src/main/resources/eatMusic.wav";
