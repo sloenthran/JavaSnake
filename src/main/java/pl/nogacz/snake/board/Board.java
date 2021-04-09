@@ -29,7 +29,9 @@ public class Board {
     private int tailLength = 0;
 
     private Coordinates snakeHeadCoordinates = new Coordinates(10, 10);
-
+    private Coordinates kareCoordinates=new Coordinates(-1,-1);
+    private Coordinates oldCoordinates=new Coordinates(10, 10);
+    
     private PawnClass snakeHeadClass = new PawnClass(Pawn.SNAKE_HEAD);
     private PawnClass snakeBodyClass = new PawnClass(Pawn.SNAKE_BODY);
     private PawnClass foodClass = new PawnClass(Pawn.FOOD);
@@ -82,6 +84,9 @@ public class Board {
     }
 
     private void moveSnake() {
+        
+        oldCoordinates=snakeHeadCoordinates;
+
         switch(direction) {
             case 1: moveSnakeHead(new Coordinates(snakeHeadCoordinates.getX(), snakeHeadCoordinates.getY() - 1)); break;
             case 2: moveSnakeHead(new Coordinates(snakeHeadCoordinates.getX(), snakeHeadCoordinates.getY() + 1)); break;
@@ -92,19 +97,31 @@ public class Board {
 
     private void moveSnakeHead(Coordinates coordinates) {
 
-
-       /* if(kare.tur==kare.turSayisi){
-            canDie=true;
-
-        }*/
-        if(!kare.kareVarMi()){
-            int x=random.nextInt(100);
-            if(x==2){
-                addKare();
-            }
-
-        }
         if(coordinates.isValid()) {
+
+            
+            if(kare.varMi()){
+                
+                
+                if(kare.tur==kare.turSayisi){
+                    canDie=true;
+                    kare=new Kare();
+                    board.remove(kareCoordinates);
+                   
+                }
+            }
+            
+
+            
+            if(!kare.varMi()){
+                int x=random.nextInt(60);
+                if(x==2){
+                    kare.var=true;
+                    addKare();
+                }
+
+            }
+            
             if(isFieldNotNull(coordinates)) {
                 if(getPawn(coordinates).getPawn().isFood()) {
                     board.remove(snakeHeadCoordinates);
@@ -126,10 +143,10 @@ public class Board {
 
                     snakeHeadCoordinates = coordinates;
                     canDie=false;
-                    System.out.println("yedi " + canDie);
+                  
                 }
                 else {
-                    System.out.println("cd " + canDie);
+                    
                     if(canDie){
                         isEndGame = true;
 
@@ -138,10 +155,76 @@ public class Board {
                                 "Maybe try again? :)");
                     }
                     else{
-                        System.out.println("cant die");
+                        int newDirection=1;
+                        coordinates=oldCoordinates;
+                        if(direction==1){
+                            newDirection=2;
+                        }
+                        else if(direction==2){
+                            newDirection=1;
+                        }
+                        if(direction==3){
+                            newDirection=4;
+                        }
+                        else if(direction==4){
+                            newDirection=3;
+                        }
+                        /*
+                        if(direction==1 || direction==2){
+                            //yon sag veya sol olarak degisecek
+                            //hangisinde gidebilecegi daha fazla alan varsa
+                            if(coordinates.getX()>10){
+                                newDirection=3; //left
+                            }
+                            else{
+                                newDirection=4; //rigth 
+                            }
+                        }
+
+                        else{
+                            //yon yukari veya asagi olarak degisecek
+                            //hangisinde gidebilecegi daha fazla alan varsa
+                            if(coordinates.getY()>10){
+                                newDirection=1; //up
+                            }
+                            else{
+                                newDirection=2; //buttom
+                            }
+                        }
+                        */
+                        //changeDirection(newDirection);
+                        direction=newDirection;
+
+                        System.out.println(direction+" " + coordinates.getX()+" "+ coordinates.getY());
+                        if(direction==3){
+                            coordinates=new Coordinates(coordinates.getX()-tailLength,coordinates.getY());
+                        }
+                        else if(direction==4){
+                            coordinates=new Coordinates(coordinates.getX()+tailLength,coordinates.getY());
+                        }
+                        else if(direction==1){
+                            coordinates=new Coordinates(coordinates.getX(),coordinates.getY()-tailLength);
+                        }
+                        else if(direction==2){
+                            coordinates=new Coordinates(coordinates.getX(),coordinates.getY()+tailLength);
+                        }
+
+
+
+                        board.remove(snakeHeadCoordinates);
+                        board.put(coordinates, snakeHeadClass);
+
+                        
+                        snakeHeadCoordinates = coordinates;
+
+                        if(tailLength > 0) {
+                            moveSnakeBody();
+                        }
+
                     }
                 }
             } else {
+            
                 board.remove(snakeHeadCoordinates);
                 board.put(coordinates, snakeHeadClass);
 
@@ -185,7 +268,6 @@ public class Board {
     }
 
     private void addKare() {
-        Coordinates kareCoordinates;
 
         do {
             kareCoordinates = new Coordinates(random.nextInt(21), random.nextInt(21));
@@ -223,6 +305,10 @@ public class Board {
     }
 
     public void readKeyboard(KeyEvent event) {
+        if(kare.varMi()){
+            kare.tur++;
+        }
+        
         switch(event.getCode()) {
             case W: changeDirection(1); break;
             case S: changeDirection(2); break;
@@ -237,6 +323,7 @@ public class Board {
     }
 
     private void changeDirection(int newDirection) {
+    
         if(newDirection == 1 && direction != 2) {
             direction = 1;
         } else if(newDirection == 2 && direction != 1) {
