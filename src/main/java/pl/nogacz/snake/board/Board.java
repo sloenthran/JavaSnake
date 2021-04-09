@@ -4,6 +4,7 @@ import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.text.Text;              // Edited line
 import pl.nogacz.snake.application.Design;
 import pl.nogacz.snake.application.EndGame;
 import pl.nogacz.snake.pawn.Pawn;
@@ -21,7 +22,7 @@ public class Board {
     private HashMap<Coordinates, PawnClass> board = new HashMap<>();
     private Design design;
     private Random random = new Random();
-
+    private Text pointAsText;                   // Edited line
     private boolean isEndGame = false;
 
     private static int direction = 1; // 1 - UP || 2 - BOTTOM || 3 - LEFT || 4 - RIGHT
@@ -37,8 +38,9 @@ public class Board {
 
     public Board(Design design) {
         this.design = design;
-
+        pointAsText=new Text("Points: "+String.valueOf(tailLength));
         addStartEntity();
+        design.getGridPane().add(pointAsText, 3, 22);
         mapTask();
     }
 
@@ -59,6 +61,7 @@ public class Board {
     private void checkMap() {
         removeAllImage();
         moveSnake();
+        pointAsText.setText("Points: "+String.valueOf(tailLength));
         displayAllImage();
     }
 
