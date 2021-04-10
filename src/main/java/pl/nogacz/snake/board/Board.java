@@ -45,7 +45,7 @@ public class Board {
         this.design = design;
         pointAsText=new Text("Points: "+String.valueOf(tailLength));
         addStartEntity();
-        design.getGridPane().add(pointAsText, 3, 22);
+        design.getGridPane().add(pointAsText, 10, 22);
         mapTask();
     }
 
