@@ -3,17 +3,21 @@ package pl.nogacz.snake.board;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;              // Edited line
 import pl.nogacz.snake.application.Design;
-import pl.nogacz.snake.application.EndGame;
+//import pl.nogacz.snake.application.EndGame;
 import pl.nogacz.snake.pawn.Pawn;
 import pl.nogacz.snake.pawn.PawnClass;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Dawid Nogacz on 19.05.2019
@@ -36,6 +40,7 @@ public class Board {
 
     private ArrayList<Coordinates> snakeTail = new ArrayList<>();
 
+    private boolean isMenuOpen = false;
     public Board(Design design) {
         this.design = design;
         pointAsText=new Text("Points: "+String.valueOf(tailLength));
@@ -59,10 +64,21 @@ public class Board {
     }
 
     private void checkMap() {
+        if(isMenuOpen){
+            try {
+                TimeUnit.MILLISECONDS.sleep(100);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+        else{
         removeAllImage();
         moveSnake();
         pointAsText.setText("Points: "+String.valueOf(tailLength));
         displayAllImage();
+        }
     }
 
     private void removeAllImage() {
@@ -101,10 +117,10 @@ public class Board {
                     addEat();
                 } else {
                     isEndGame = true;
-
-                    new EndGame("End game...\n" +
+                    openTheMenu(isEndGame);
+                    /*new EndGame("End game...\n" +
                             "You have " + tailLength + " points. \n" +
-                            "Maybe try again? :)");
+                            "Maybe try again? :)");*/
                 }
             } else {
                 board.remove(snakeHeadCoordinates);
@@ -187,7 +203,52 @@ public class Board {
             case DOWN: changeDirection(2); break;
             case LEFT: changeDirection(3); break;
             case RIGHT: changeDirection(4); break;
+            case ESCAPE:
+                openTheMenu(false);
+            break;
         }
+    }
+    private void openTheMenu(boolean isItEndGame){
+        isMenuOpen=true;
+                Alert alert = new Alert(Alert.AlertType.NONE);
+                
+                ButtonType newGameButton = new ButtonType("New game");
+                ButtonType resumeButton = new ButtonType("Resume");
+                ButtonType exitButton = new ButtonType("Exit");
+
+                if(isItEndGame){
+                    alert.setTitle("Game Over");
+                    alert.setContentText("Game is over. Your final point is: "+String.valueOf(tailLength));
+                    alert.getButtonTypes().setAll(newGameButton, exitButton);
+                }
+                else{
+                    alert.setTitle("Game Menu");
+                    alert.setContentText("Your current point is: "+String.valueOf(tailLength));
+                    
+                    alert.getButtonTypes().setAll(newGameButton,resumeButton, exitButton);
+                }
+
+                Optional<ButtonType> result = alert.showAndWait();
+
+                if (result.get() == newGameButton){
+                    tailLength=0;
+                    snakeHeadCoordinates=new Coordinates(10,10);
+                    removeAllImage();
+                    snakeTail.clear();
+                    board.clear();
+                    direction=1;
+                    addStartEntity();
+                    
+                    System.out.println("NEW GAME _________________________");
+                    isEndGame=false;
+                    isMenuOpen=false;
+                }else if(result.get()==resumeButton){
+                    isMenuOpen=false;
+                    System.out.println("Resume_____________");
+                } 
+                else {
+                    System.exit(0);
+                }
     }
 
     private void changeDirection(int newDirection) {
