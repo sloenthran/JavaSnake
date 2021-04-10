@@ -214,18 +214,19 @@ public class Board {
                 
                 ButtonType newGameButton = new ButtonType("New game");
                 ButtonType resumeButton = new ButtonType("Resume");
+                ButtonType settingsButton = new ButtonType("Settings");
                 ButtonType exitButton = new ButtonType("Exit");
 
                 if(isItEndGame){
                     alert.setTitle("Game Over");
                     alert.setContentText("Game is over. Your final point is: "+String.valueOf(tailLength));
-                    alert.getButtonTypes().setAll(newGameButton, exitButton);
+                    alert.getButtonTypes().setAll(newGameButton, settingsButton, exitButton);
                 }
                 else{
                     alert.setTitle("Game Menu");
                     alert.setContentText("Your current point is: "+String.valueOf(tailLength));
                     
-                    alert.getButtonTypes().setAll(newGameButton,resumeButton, exitButton);
+                    alert.getButtonTypes().setAll(newGameButton,resumeButton,settingsButton, exitButton);
                 }
 
                 Optional<ButtonType> result = alert.showAndWait();
