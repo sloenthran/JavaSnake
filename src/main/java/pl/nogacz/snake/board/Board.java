@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 import pl.nogacz.snake.application.Design;
 import pl.nogacz.snake.application.EndGame;
+import pl.nogacz.snake.pawn.Daire;
 import pl.nogacz.snake.pawn.Kare;
 import pl.nogacz.snake.pawn.Pawn;
 import pl.nogacz.snake.pawn.PawnClass;
@@ -29,14 +30,19 @@ public class Board {
     private int tailLength = 0;
 
     private Coordinates snakeHeadCoordinates = new Coordinates(10, 10);
-    private Coordinates kareCoordinates=new Coordinates(-1,-1);
+    private Coordinates kareCoordinates=new Coordinates(-1,-1); //henuz yok
+    private Coordinates daireCoordinates=new Coordinates(-1,-1);
     private Coordinates oldCoordinates=new Coordinates(10, 10);
     
     private PawnClass snakeHeadClass = new PawnClass(Pawn.SNAKE_HEAD);
     private PawnClass snakeBodyClass = new PawnClass(Pawn.SNAKE_BODY);
     private PawnClass foodClass = new PawnClass(Pawn.FOOD);
-    private PawnClass kareClass=new PawnClass(Pawn.Kare);
+    private PawnClass kareClass=new PawnClass(Pawn.Kare); 
+    private PawnClass daireClass=new PawnClass(Pawn.Daire);
+
     private Kare kare=new Kare();
+    private Daire daire = new Daire();
+
 
     private ArrayList<Coordinates> snakeTail = new ArrayList<>();
 
@@ -102,7 +108,6 @@ public class Board {
             
             if(kare.varMi()){
                 
-                
                 if(kare.tur==kare.turSayisi){
                     canDie=true;
                     kare=new Kare();
@@ -118,6 +123,27 @@ public class Board {
                 if(x==2){
                     kare.var=true;
                     addKare();
+                }
+
+            }
+
+            if(daire.varMi()){
+                       
+                if(daire.tur==daire.turSayisi){
+                    canDie=true;
+                    daire=new Daire();
+                    board.remove(daireCoordinates);
+                   
+                }
+            }
+            
+
+            
+            if(!daire.varMi()){
+                int x=random.nextInt(90); //nadir
+                if(x==2){
+                    daire.var=true;
+                    addDaire();
                 }
 
             }
@@ -143,7 +169,20 @@ public class Board {
 
                     snakeHeadCoordinates = coordinates;
                     canDie=false;
-                  
+                    
+                    kare.tur=0;
+                }
+                else if(getPawn(coordinates).getPawn().isDaire()){
+                    board.remove(snakeHeadCoordinates);
+                    board.put(snakeHeadCoordinates, snakeBodyClass);
+                    board.put(coordinates, snakeHeadClass);
+                    snakeTail.add(snakeHeadCoordinates);
+                    tailLength++;
+
+                    snakeHeadCoordinates = coordinates;
+                    canDie=false;
+                    
+                    daire.tur=0;
                 }
                 else {
                     
@@ -154,9 +193,10 @@ public class Board {
                                 "You have " + tailLength + " points. \n" +
                                 "Maybe try again? :)");
                     }
-                    else{
+                    else{ 
                         int newDirection=1;
                         coordinates=oldCoordinates;
+                        //tam zit yeni yon
                         if(direction==1){
                             newDirection=2;
                         }
@@ -169,47 +209,48 @@ public class Board {
                         else if(direction==4){
                             newDirection=3;
                         }
-                        /*
-                        if(direction==1 || direction==2){
-                            //yon sag veya sol olarak degisecek
-                            //hangisinde gidebilecegi daha fazla alan varsa
-                            if(coordinates.getX()>10){
-                                newDirection=3; //left
-                            }
-                            else{
-                                newDirection=4; //rigth 
-                            }
-                        }
-
-                        else{
-                            //yon yukari veya asagi olarak degisecek
-                            //hangisinde gidebilecegi daha fazla alan varsa
-                            if(coordinates.getY()>10){
-                                newDirection=1; //up
-                            }
-                            else{
-                                newDirection=2; //buttom
-                            }
-                        }
-                        */
-                        //changeDirection(newDirection);
+                        
                         direction=newDirection;
-
-                        System.out.println(direction+" " + coordinates.getX()+" "+ coordinates.getY());
-                        if(direction==3){
-                            coordinates=new Coordinates(coordinates.getX()-tailLength,coordinates.getY());
+                        boolean kenarda=(coordinates.getX()==1)|(coordinates.getX()==20)|(coordinates.getY()==1)|(coordinates.getY()==20);
+                        
+                        if(kenarda){ //kenarlara carpmasi
+                            if(direction==3){
+                                coordinates=new Coordinates(coordinates.getX()-tailLength,coordinates.getY());
+                            }
+                            else if(direction==4){
+                                coordinates=new Coordinates(coordinates.getX()+tailLength,coordinates.getY());
+                            }
+                            else if(direction==1){
+                                coordinates=new Coordinates(coordinates.getX(),coordinates.getY()-tailLength);
+                            }
+                            else if(direction==2){
+                                coordinates=new Coordinates(coordinates.getX(),coordinates.getY()+tailLength);
+                            }
                         }
-                        else if(direction==4){
-                            coordinates=new Coordinates(coordinates.getX()+tailLength,coordinates.getY());
+                        else{ //kendine carpmasi
+                            if(direction==1 || direction==2){
+                                //yon sag veya sol olarak degisecek
+                                //hangisinde gidebilecegi daha fazla alan varsa
+                                if(coordinates.getX()>10){
+                                    newDirection=3; //left
+                                }
+                                else{
+                                    newDirection=4; //rigth 
+                                }
+                            }
+    
+                            else{
+                                //yon yukari veya asagi olarak degisecek
+                                //hangisinde gidebilecegi daha fazla alan varsa
+                                if(coordinates.getY()>10){
+                                    newDirection=1; //up
+                                }
+                                else{
+                                    newDirection=2; //buttom
+                                }
+                            }
+                            direction=newDirection;
                         }
-                        else if(direction==1){
-                            coordinates=new Coordinates(coordinates.getX(),coordinates.getY()-tailLength);
-                        }
-                        else if(direction==2){
-                            coordinates=new Coordinates(coordinates.getX(),coordinates.getY()+tailLength);
-                        }
-
-
 
                         board.remove(snakeHeadCoordinates);
                         board.put(coordinates, snakeHeadClass);
@@ -268,12 +309,21 @@ public class Board {
     }
 
     private void addKare() {
-
+        //kare ekleme
         do {
             kareCoordinates = new Coordinates(random.nextInt(21), random.nextInt(21));
         } while(isFieldNotNull(kareCoordinates));
 
         board.put(kareCoordinates, kareClass);
+    }
+   
+    private void addDaire() {
+        //daire ekleme
+        do {
+            daireCoordinates = new Coordinates(random.nextInt(21), random.nextInt(21));
+        } while(isFieldNotNull(daireCoordinates));
+
+        board.put(daireCoordinates, daireClass);
     }
 
 
@@ -307,6 +357,10 @@ public class Board {
     public void readKeyboard(KeyEvent event) {
         if(kare.varMi()){
             kare.tur++;
+            //bir tur gecti
+        }
+        if(daire.varMi()){
+            daire.tur++;
         }
         
         switch(event.getCode()) {

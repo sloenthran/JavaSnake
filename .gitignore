@@ -9,3 +9,4 @@ out/
 .settings/
 .vscode/
 bin/
+/.metadata/

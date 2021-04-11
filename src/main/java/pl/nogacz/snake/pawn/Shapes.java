@@ -1,13 +1,9 @@
 package pl.nogacz.snake.pawn;
 
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import pl.nogacz.snake.application.Resources;
-
-
 public class Shapes{
 
-    public final int turSayisi=0; //etkili oldugu tur sayisi
+    public final int turSayisi=0;
+    //daire daha nadir cikan ve uzun bir sure koruyan kare ise daha fazla cikan ve daha az koruyan bir sekil 
 
     public boolean var;
     public int tur=0;

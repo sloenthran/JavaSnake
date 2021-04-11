@@ -1,7 +1,5 @@
 package pl.nogacz.snake.pawn;
 
-//import javafx.scene.shape.Shape;
-
 public class Kare extends Shapes {
 
     public Kare() {

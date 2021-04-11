@@ -8,7 +8,8 @@ public enum Pawn {
     BRICK,
     SNAKE_HEAD,
     SNAKE_BODY,
-    Kare;
+    Kare,
+    Daire;
 
     public boolean isFood() {
         return this == FOOD;
@@ -16,6 +17,9 @@ public enum Pawn {
     
     public boolean isKare() {
         return this == Kare;
+    }
+    public boolean isDaire() {
+        return this == Daire;
     }
 
     public boolean isHead() {
