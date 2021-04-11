@@ -12,8 +12,10 @@ What to write here... This is just a known snake game for everyone :)
 * Unpack archive
 * Next then double-click on the JavaSnake.jar file or run the command using bash:
 
+## Running
 ```bash
-java -jar JavaSnake.jar
+gradle build
+gradle run
 ```
 ## Control
 WASD or arrows
